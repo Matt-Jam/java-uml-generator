@@ -1,0 +1,14 @@
+resolver: lts-20.9
+
+packages:
+- .
+
+extra-deps: []
+
+flags: {}
+
+extra-package-dbs: []
+
+# Optional: if you have specific options for GHC
+ghc-options:
+  "$everything": -Wall

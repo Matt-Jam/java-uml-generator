@@ -1,0 +1,32 @@
+# Stack build artifacts
+.stack-work/
+
+# Cabal build artifacts
+dist/
+dist-newstyle/
+
+# Local configuration
+.stack-work/
+*.swp
+*.swo
+*.swn
+*.un~
+*~
+
+# GHCi history
+.ghci-history
+.haskeline_history
+
+# Binary output
+*.o
+*.hi
+*.dyn_o
+*.dyn_hi
+*.prof
+*.aux
+*.hp
+*.eventlog
+
+# Cabal and Stack packages
+.cabal-sandbox/
+cabal.sandbox.config
