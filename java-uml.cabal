@@ -27,6 +27,7 @@ library
   exposed-modules:
       Lib
       Parser
+      Types
   other-modules:
       Paths_java_uml
   autogen-modules:
