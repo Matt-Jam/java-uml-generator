@@ -17,22 +17,21 @@ data AccessModifier = Public | Private | Protected
 data ClassSignature = ClassSignature {
     classAccessModifier :: ClassAccessModifier,
     className :: String
-}
+} deriving(Eq,Show)
 
 
 data MethodSignature = MethodSignature {
     methodAccessModifier :: AccessModifier,
-    methodName :: String,
     methodReturnType :: String,
-    methodParameters :: [String]
-}
-
+    methodName :: String,
+    methodParameters :: [(String, String)]
+} deriving (Eq,Show)
 
 data AttributeSignature = AttributeSignature {
     attributeAccessModifier :: AccessModifier,
-    attributeName :: String,
-    atrributeType :: String
-}
+    atrributeType :: String,
+    attributeName :: String
+} deriving (Eq,Show)
 
 
 data Class = Class {
