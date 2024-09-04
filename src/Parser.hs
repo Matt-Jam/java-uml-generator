@@ -7,6 +7,7 @@ import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 import Data.Void (Void)
 import qualified Control.Monad
+import Data.Char (GeneralCategory(Control))
 
 
 classAccessModifierMappings :: [(String, ClassAccessModifier)]
@@ -69,7 +70,6 @@ attributeSignature = lexeme $ do
     pure $ AttributeSignature access attType name
 
 
-
 --Parses a type key pair in a method signature 
 methodParameter :: Parser (String,String)
 methodParameter = lexeme $ do
@@ -94,7 +94,16 @@ methodSignature = lexeme $ do
     MethodSignature access attType name <$> methodParameters
 
 scopeConsumer :: Parser ()
-scopeConsumer = choice $ map try [string "{">>scopeConsumer, Control.Monad.void (string "}"), clearUntil $ stringOptions ["{","}"]]
+scopeConsumer = scopeConsumer' (-1)
+
+scopeConsumer' :: Int -> Parser ()
+scopeConsumer' x = do
+    clearUntil $ lookAhead $ stringOptions ["{","}"]
+    s <- anySingle
+    case s of
+        '{' -> scopeConsumer' (x+1)
+        '}' -> if x==0 then pure () else scopeConsumer' (x-1)
+        _ -> pure ()
 
 method :: Parser MethodSignature
 method = methodSignature <* space
@@ -102,5 +111,7 @@ method = methodSignature <* space
 testing:: Parser [AttributeSignature]
 testing = many attributeSignature
 
-runParser :: String -> Either (ParseErrorBundle String Void) ()
-runParser = parse (scopeConsumer) ""
+runParser :: String -> IO ()
+runParser s = case parse (scopeConsumer >> eof) "" s of
+    Left err  -> putStrLn (errorBundlePretty err)
+    Right res -> print res
