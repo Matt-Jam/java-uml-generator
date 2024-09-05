@@ -8,7 +8,7 @@ import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 import qualified Control.Monad
-
+import Data.Bifunctor (first,second, Bifunctor (second))
 
 classAccessModifierMappings :: [(String, ClassAccessModifier)]
 classAccessModifierMappings = [("public",PublicClass),("private",PrivateClass)]
@@ -39,6 +39,11 @@ stringValMap =  choice . map (\(s,t) -> t <$ try (string s))
 -- Clear until a string appears
 clearUntil :: Parser a -> Parser ()
 clearUntil p = Control.Monad.void (manyTill anySingle p)
+
+findNextInstance :: Parser a -> Parser a
+findNextInstance end = go
+    where
+        go = end <|> (anySingle >> go)
 
 clearUntilString :: String -> Parser ()
 clearUntilString s = clearUntil (try $ string s)
@@ -109,8 +114,29 @@ scopeConsumer' x = do
 method :: Parser MethodSignature
 method = methodSignature <* (space >> scopeConsumer)
 
+many2 :: Parser a -> Parser b -> Parser ([a],[b])
+many2 p1 p2 = go
+    where
+        go = do
+            t1 <- optional (try p1)
+            case t1 of
+                (Just r) ->  first (r :) <$> go
+                Nothing -> do 
+                    t2 <- optional (try p2)
+                    case t2 of
+                        (Just r) -> second (r :) <$> go
+                        Nothing -> pure ([],[])
+
+
+classParser :: Parser Class
+classParser = lexeme $ do
+    spacesAndComments
+    classSig <- findNextInstance classSignature
+    (m,a) <- many2 method attributeSignature
+    space >> string "}"
+    pure $ Class classSig m a
 
 runClassParser :: String -> IO ()
-runClassParser s = case parse (methodSignature <* eof) "" s of
+runClassParser s = case parse (classParser <* eof) "" s of
     Left err  -> putStrLn (errorBundlePretty err)
     Right res -> print res

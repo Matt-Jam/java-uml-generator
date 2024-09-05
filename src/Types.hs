@@ -4,7 +4,8 @@ module Types (
     AccessModifier(..),
     ClassSignature(..),
     MethodSignature(..),
-    AttributeSignature(..)
+    AttributeSignature(..),
+    Class(..)
 ) where 
 
 import Text.Megaparsec
@@ -45,4 +46,4 @@ data Class = Class {
     signature :: ClassSignature,
     methods :: [MethodSignature],
     attributes :: [AttributeSignature]
-}
+} deriving (Eq, Show)
