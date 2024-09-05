@@ -1,4 +1,11 @@
-module Types where 
+module Types (
+    Parser,
+    ClassAccessModifier(..),
+    AccessModifier(..),
+    ClassSignature(..),
+    MethodSignature(..),
+    AttributeSignature(..)
+) where 
 
 import Text.Megaparsec
 import Data.Void

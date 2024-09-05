@@ -1,13 +1,13 @@
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
-module Parser where
+module Parser (
+    runClassParser
+) where
 
-import Types ( Parser, ClassSignature (ClassSignature), ClassAccessModifier (PublicClass, PrivateClass), AttributeSignature (AttributeSignature), AccessModifier (Public, Private, Protected), MethodSignature (MethodSignature) )
+import Types
 import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
-import Data.Void (Void)
 import qualified Control.Monad
-import Data.Char (GeneralCategory(Control))
 
 
 classAccessModifierMappings :: [(String, ClassAccessModifier)]
@@ -43,7 +43,7 @@ clearUntil p = Control.Monad.void (manyTill anySingle p)
 clearUntilString :: String -> Parser ()
 clearUntilString s = clearUntil (try $ string s)
 
--- Requires a keywork in a signature, allowing arbitrary whitespace
+-- Requires a keyword in a signature, allowing arbitrary whitespace
 requireKeyword :: String -> Parser String
 requireKeyword s = string s <* space1
 
@@ -81,20 +81,20 @@ methodParameter = lexeme $ do
     pure (paramType,paramName)
 
 --Parses the list of method parameters from a method signature
-methodParameters :: Parser [(String,String)]
-methodParameters = string "(" >> manyTill methodParameter (try $ string ")")
+methodParams :: Parser [(String,String)]
+methodParams = string "(" >> manyTill methodParameter (try $ string ")")
 
 -- Parses a method signature
 methodSignature :: Parser MethodSignature
 methodSignature = lexeme $ do
     access <- accessModifier
     attType <- stringUntil (string " ") <* space
-    name <- stringUntil $ lookAhead $ stringOptions [" ", "("]
-    space
-    MethodSignature access attType name <$> methodParameters
+    name <- stringUntil (lookAhead $ stringOptions [" ", "("]) <* space
+    MethodSignature access attType name <$> methodParams
 
+-- This parser will find the next '{', and then consume the entire scope that it opens.
 scopeConsumer :: Parser ()
-scopeConsumer = scopeConsumer' (-1)
+scopeConsumer = lexeme $ scopeConsumer' (-1)
 
 scopeConsumer' :: Int -> Parser ()
 scopeConsumer' x = do
@@ -105,13 +105,12 @@ scopeConsumer' x = do
         '}' -> if x==0 then pure () else scopeConsumer' (x-1)
         _ -> pure ()
 
+-- Parser for a method, returning the method signature
 method :: Parser MethodSignature
-method = methodSignature <* space
+method = methodSignature <* (space >> scopeConsumer)
 
-testing:: Parser [AttributeSignature]
-testing = many attributeSignature
 
-runParser :: String -> IO ()
-runParser s = case parse (scopeConsumer >> eof) "" s of
+runClassParser :: String -> IO ()
+runClassParser s = case parse (methodSignature <* eof) "" s of
     Left err  -> putStrLn (errorBundlePretty err)
     Right res -> print res
