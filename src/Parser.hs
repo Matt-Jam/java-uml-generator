@@ -93,9 +93,16 @@ methodParams = string "(" >> manyTill methodParameter (try $ string ")")
 methodSignature :: Parser MethodSignature
 methodSignature = lexeme $ do
     access <- accessModifier
-    attType <- stringUntil (string " ") <* space
-    name <- stringUntil (lookAhead $ stringOptions [" ", "("]) <* space
-    MethodSignature access attType name <$> methodParams
+    optional $ string "static" <* space1
+    nextKw <- stringUntil (string " ") <* space
+    r <- optional $ lookAhead $ string "("
+    case r of
+        Just _ -> do
+            name <- stringUntil (lookAhead $ stringOptions [" ", "("]) <* space
+            MethodSignature access nextKw name <$> methodParams
+        Nothing -> do 
+            MethodSignature access "Contructor" nextKw <$> methodParams
+
 
 -- This parser will find the next '{', and then consume the entire scope that it opens.
 scopeConsumer :: Parser ()
@@ -114,6 +121,7 @@ scopeConsumer' x = do
 method :: Parser MethodSignature
 method = methodSignature <* (space >> scopeConsumer)
 
+-- The many combinator extended to having two optional parsers
 many2 :: Parser a -> Parser b -> Parser ([a],[b])
 many2 p1 p2 = go
     where
@@ -121,13 +129,13 @@ many2 p1 p2 = go
             t1 <- optional (try p1)
             case t1 of
                 (Just r) ->  first (r :) <$> go
-                Nothing -> do 
+                Nothing -> do
                     t2 <- optional (try p2)
                     case t2 of
                         (Just r) -> second (r :) <$> go
                         Nothing -> pure ([],[])
 
-
+-- Parser for a class 
 classParser :: Parser Class
 classParser = lexeme $ do
     spacesAndComments
