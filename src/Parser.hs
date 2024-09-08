@@ -1,6 +1,7 @@
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
 module Parser (
-    runClassParser
+    runClassParser,
+    testing
 ) where
 
 import Types
@@ -93,15 +94,15 @@ methodParams = string "(" >> manyTill methodParameter (try $ string ")")
 methodSignature :: Parser MethodSignature
 methodSignature = lexeme $ do
     access <- accessModifier
-    optional $ string "static" <* space1
-    nextKw <- stringUntil (string " ") <* space
+    optional $ try $ string "static" <* space1
+    nextKw <- stringUntil (lookAhead $ stringOptions [" ","("]) <* space
     r <- optional $ lookAhead $ string "("
     case r of
         Just _ -> do
+            MethodSignature access "Constructor" nextKw <$> methodParams
+        Nothing -> do 
             name <- stringUntil (lookAhead $ stringOptions [" ", "("]) <* space
             MethodSignature access nextKw name <$> methodParams
-        Nothing -> do 
-            MethodSignature access "Contructor" nextKw <$> methodParams
 
 
 -- This parser will find the next '{', and then consume the entire scope that it opens.
@@ -148,3 +149,9 @@ runClassParser :: String -> IO ()
 runClassParser s = case parse (classParser <* eof) "" s of
     Left err  -> putStrLn (errorBundlePretty err)
     Right res -> print res
+
+
+testing :: IO ()
+testing = do 
+    code <- readFile "./test/Car.java"
+    runClassParser code

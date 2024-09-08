@@ -9,7 +9,7 @@ public class Car {
     private boolean isEngineOn;
 
     // Constructor to initialize the car object
-    public Car(String make, String model, int year, double mileage) {
+    public Car(String make, String model, int year, double mileage){
         this.make = make;
         this.model = model;
         this.year = year;
