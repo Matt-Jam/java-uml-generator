@@ -70,9 +70,14 @@ test-suite java-uml-test
       test
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      HUnit >=1.6
+    , QuickCheck >=2.13
+    , base >=4.7 && <5
     , containers
     , java-uml
     , megaparsec
     , parser-combinators
+    , tasty >=1.3
+    , tasty-hunit >=0.10
+    , tasty-quickcheck >=0.10
   default-language: Haskell2010

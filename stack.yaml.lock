@@ -3,7 +3,70 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: crypton-0.34@sha256:9e4b50d79d1fba681befa08151db7223d2b4bb72564853e8530e614105d53a1a,14577
+    pantry-tree:
+      size: 23275
+      sha256: 85f438e6d328fc2e464c8914a08089ff312044b96ac155a25747512e440e0a12
+  original:
+    hackage: crypton-0.34
+- completed:
+    hackage: http-client-tls-0.3.6.3@sha256:a5909ce412ee65c141b8547f8fe22236f175186c95c708e86a46b5547394f910,2046
+    pantry-tree:
+      size: 435
+      sha256: a5659b6051a40039eec1db4b5350a232e2dced7a557917082a39623cfc605323
+  original:
+    hackage: http-client-tls-0.3.6.3
+- completed:
+    hackage: crypton-connection-0.3.1@sha256:4d0958537197956b536ea91718b1749949757022532f50b8f683290056a19021,1581
+    pantry-tree:
+      size: 394
+      sha256: e35ac3a35611afab9fafac633d0c4e6328b9cce4c8262378671d6c5a739e7e70
+  original:
+    hackage: crypton-connection-0.3.1
+- completed:
+    hackage: hpack-0.36.0@sha256:48f98f1b607bb856acf890fe4e62a600d16961763102e4e8b9bc76349cce05fe,5229
+    pantry-tree:
+      size: 3742
+      sha256: 7aa7deafdf4b5769e1f863cb98550a60ebec6ff32a6e7bf3a7421c530d9d4e4c
+  original:
+    hackage: hpack-0.36.0
+- completed:
+    hackage: crypton-x509-1.7.6@sha256:c567657a705b6d6521f9dd2de999bf530d618ec00f3b939df76a41fb0fe94281,2339
+    pantry-tree:
+      size: 1080
+      sha256: 729e7db8dfc0a8b43e08bbd8d1387c9065e39beda6ac39e0fb9f10140810a3eb
+  original:
+    hackage: crypton-x509-1.7.6
+- completed:
+    hackage: crypton-x509-store-1.6.9@sha256:422b9b9f87a7382c66385d047615b16fc86a68c08ea22b1e0117c143a2d44050,1750
+    pantry-tree:
+      size: 406
+      sha256: 87654d130a7f987ee139c821a1be45736d18df9fa4cb1142c4e054d3802338f3
+  original:
+    hackage: crypton-x509-store-1.6.9
+- completed:
+    hackage: crypton-x509-system-1.6.7@sha256:023ed573d82983bc473a37a89e0434a085b413be9f68d07e085361056afd4637,1532
+    pantry-tree:
+      size: 399
+      sha256: c0ca49e6a9537f3fdb7b47c5cfe93f7d744a369bf9d089f3c668b9c2d97402b7
+  original:
+    hackage: crypton-x509-system-1.6.7
+- completed:
+    hackage: crypton-x509-validation-1.6.12@sha256:85989721b64be4b90de9f66ef641c26f57575cffed1a50d707065fb60176f386,2227
+    pantry-tree:
+      size: 639
+      sha256: d4a0135f11218614fcd912cffaf54de8f749caca8696380e2589cbcfd64cc681
+  original:
+    hackage: crypton-x509-validation-1.6.12
+- completed:
+    hackage: tls-1.9.0@sha256:8ad332dc0224decb1b137bf6c9678b4f786487b9aaa5c9068cd3ad19d42c39a7,5571
+    pantry-tree:
+      size: 4897
+      sha256: 91d022739795013aad4d5fee48ff5248623ed4cc83a611c9aa7c52e21766221b
+  original:
+    hackage: tls-1.9.0
 snapshots:
 - completed:
     size: 649333

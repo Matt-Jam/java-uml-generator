@@ -3,7 +3,16 @@ resolver: lts-20.9
 packages:
 - .
 
-extra-deps: []
+extra-deps:
+  - crypton-0.34
+  - http-client-tls-0.3.6.3
+  - crypton-connection-0.3.1
+  - hpack-0.36.0
+  - crypton-x509-1.7.6
+  - crypton-x509-store-1.6.9
+  - crypton-x509-system-1.6.7
+  - crypton-x509-validation-1.6.12
+  - tls-1.9.0
 
 flags: {}
 

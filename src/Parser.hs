@@ -10,6 +10,7 @@ import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 import qualified Control.Monad
 import Data.Bifunctor (first,second, Bifunctor (second))
+import Data.Void (Void)
 
 classAccessModifierMappings :: [(String, ClassAccessModifier)]
 classAccessModifierMappings = [("public",PublicClass),("private",PrivateClass)]
@@ -100,7 +101,7 @@ methodSignature = lexeme $ do
     case r of
         Just _ -> do
             MethodSignature access "Constructor" nextKw <$> methodParams
-        Nothing -> do 
+        Nothing -> do
             name <- stringUntil (lookAhead $ stringOptions [" ", "("]) <* space
             MethodSignature access nextKw name <$> methodParams
 
@@ -145,13 +146,14 @@ classParser = lexeme $ do
     space >> string "}"
     pure $ Class classSig m a
 
-runClassParser :: String -> IO ()
-runClassParser s = case parse (classParser <* eof) "" s of
-    Left err  -> putStrLn (errorBundlePretty err)
-    Right res -> print res
 
+runClassParser :: String -> Either (ParseErrorBundle String Void) Class
+runClassParser = parse (classParser <* eof) ""
 
-testing :: IO ()
-testing = do 
-    code <- readFile "./test/Car.java"
-    runClassParser code
+testing :: String -> IO ()
+testing s = do 
+    file <- readFile s 
+    let p = runClassParser file 
+    case p of 
+        Left err -> print err 
+        Right r -> print r 

@@ -27,6 +27,7 @@ dependencies:
 
 
 
+
 ghc-options:
 - -Wall
 - -Wcompat
@@ -62,3 +63,8 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - java-uml
+    - HUnit >= 1.6
+    - QuickCheck >= 2.13
+    - tasty >= 1.3
+    - tasty-hunit >= 0.10
+    - tasty-quickcheck >= 0.10
