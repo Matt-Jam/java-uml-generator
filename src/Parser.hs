@@ -1,7 +1,6 @@
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
 module Parser (
     runClassParser,
-    testing
 ) where
 
 import Types
@@ -149,11 +148,3 @@ classParser = lexeme $ do
 
 runClassParser :: String -> Either (ParseErrorBundle String Void) Class
 runClassParser = parse (classParser <* eof) ""
-
-testing :: String -> IO ()
-testing s = do 
-    file <- readFile s 
-    let p = runClassParser file 
-    case p of 
-        Left err -> print err 
-        Right r -> print r 

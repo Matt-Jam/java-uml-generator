@@ -10,7 +10,7 @@ generateClassTest x = do
   let expectedFilePath = "./test/CodeExamples/"<>x<>".expected"
   shouldBe <- read <$> readFile expectedFilePath
   case runClassParser javaCode of
-    Left err -> assertFailure $ "UHOH"
+    Left err -> assertFailure $ "Parse error" <> show err
     Right r -> r @?= shouldBe
 
 
